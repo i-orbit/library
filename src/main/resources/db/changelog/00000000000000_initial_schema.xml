@@ -4,4 +4,54 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
+    <changeSet id="000000000000001" author="inmaytide">
+        <createTable tableName="system_properties">
+            <column name="tenant_id" type="bigint" remarks="所属租户">
+                <constraints nullable="false"/>
+            </column>
+            <column name="key" type="varchar(128)" remarks="配置项">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(512)" remarks="配置项说明"/>
+            <column name="value" type="varchar(512)" remarks="配置值"/>
+            <column name="authenticated" type="varchar(2)" remarks="是否必须登录"/>
+            <column name="exposed" type="varchar(2)" remarks="是否暴露给前端" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="global" type="varchar(2)" remarks="是否全局默认" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="system_properties" columnNames="tenant_id, key"/>
+        <createTable tableName="operation_log_cleaning" remarks="用户日志自动清理记录">
+            <column name="id" type="bigint" remarks="唯一标识">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="tenant_id" type="bigint" remarks="所属租户"/>
+            <column name="time" type="timestamp" remarks="执行时间"/>
+            <column name="affected" type="int" remarks="删除记录行数"/>
+        </createTable>
+        <createTable tableName="operation_log" remarks="用户操作日志">
+            <column name="id" type="bigint" remarks="唯一标识">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="tenant_id" type="bigint" remarks="所属租户"/>
+            <column name="operator" type="bigint" remarks="操作人"/>
+            <column name="operation_time" type="timestamp" remarks="操作时间"/>
+            <column name="result" type="varchar(16)" remarks="操作结果"/>
+            <column name="client_description" type="varchar(512)" remarks="客户端描述"/>
+            <column name="ip_address" type="varchar(128)" remarks="IP地址(归属地)"/>
+            <column name="service" type="varchar(32)" remarks="微服务名称"/>
+            <column name="business" type="varchar(64)" remarks="业务描述"/>
+            <column name="description" type="varchar(128)" remarks="操作描述"/>
+            <column name="arguments" type="text" remarks="请求参数"/>
+            <column name="response" type="text" remarks="响应内容/错误描述"/>
+            <column name="chain" type="varchar(64)" remarks="接口调用链标识"/>
+            <column name="platform" type="varchar(8)" remarks="客户端平台"/>
+            <column name="path" type="varchar(512)" remarks="请求地址"/>
+            <column name="http_method" type="varchar(8)" remarks="HttpMethod"/>
+        </createTable>
+    </changeSet>
+
+
 </databaseChangeLog>

@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties extends CommonProperties {
 
-    public boolean allowUsersToLoginSimultaneously;
+    private long autoCleaningOperationLogIntervalInDays = 180;
 
-    public boolean isAllowUsersToLoginSimultaneously() {
-        return allowUsersToLoginSimultaneously;
+    public long getAutoCleaningOperationLogIntervalInDays() {
+        return autoCleaningOperationLogIntervalInDays;
     }
 
-    public void setAllowUsersToLoginSimultaneously(boolean allowUsersToLoginSimultaneously) {
-        this.allowUsersToLoginSimultaneously = allowUsersToLoginSimultaneously;
+    public void setAutoCleaningOperationLogIntervalInDays(long autoCleaningOperationLogIntervalInDays) {
+        this.autoCleaningOperationLogIntervalInDays = autoCleaningOperationLogIntervalInDays;
     }
+
 }
