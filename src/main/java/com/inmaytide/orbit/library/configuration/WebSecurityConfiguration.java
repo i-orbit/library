@@ -57,6 +57,8 @@ public class WebSecurityConfiguration {
             // api 文档不需要登录
             c.requestMatchers("/v3/api-docs/**").permitAll();
             c.requestMatchers("/swagger-ui/**").permitAll();
+            // 后端接口不需要的登录
+            c.requestMatchers("/api/backend/**").permitAll();
             // 剩余所有接口需要登录
             c.anyRequest().authenticated();
         });
