@@ -12,14 +12,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties extends CommonProperties {
 
-    private long autoCleaningOperationLogIntervalInDays = 180;
-
-    public long getAutoCleaningOperationLogIntervalInDays() {
-        return autoCleaningOperationLogIntervalInDays;
-    }
-
-    public void setAutoCleaningOperationLogIntervalInDays(long autoCleaningOperationLogIntervalInDays) {
-        this.autoCleaningOperationLogIntervalInDays = autoCleaningOperationLogIntervalInDays;
-    }
 
 }
