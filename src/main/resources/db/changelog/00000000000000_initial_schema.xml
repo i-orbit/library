@@ -51,6 +51,11 @@
             <column name="path" type="varchar(512)" remarks="请求地址"/>
             <column name="http_method" type="varchar(8)" remarks="HttpMethod"/>
         </createTable>
+
+        <sql>
+            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`, `exposed`, `global`) VALUES (3721, 'times.days.user.password.valid', '用户密码有效时间(天)', '180', 'Y', 'N', 'Y');
+            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`, `exposed`, `global`) VALUES (3721, 'times.days.operation.log.retention', '操作日志保留时间(天)', '180', 'Y', 'N', 'Y');
+        </sql>
     </changeSet>
 
 

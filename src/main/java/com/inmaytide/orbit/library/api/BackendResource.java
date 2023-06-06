@@ -33,6 +33,12 @@ public class BackendResource {
     }
 
     @GetMapping("/system/properties")
+    @Operation(summary = "通过全局配置初始化租户私有化的系统配置列表, 已存在的不处理")
+    public void initializeSystemPropertiesForTenant(@RequestParam Long tenantId) {
+        service.initializeForTenant(tenantId);
+    }
+
+    @GetMapping("/system/properties")
     @Operation(summary = "查询指定租户的系统配置")
     public List<SystemProperty> getProperties(@RequestParam Long tenantId) {
         Map<String, SystemProperty> properties = service.findByTenant(tenantId).stream().collect(Collectors.toMap(SystemProperty::getKey, Function.identity()));

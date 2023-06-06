@@ -12,4 +12,9 @@ public interface SystemPropertyService {
 
     List<SystemProperty> findByTenant(Long tenantId);
 
+    void initializeForTenant(Long tenantId);
+
+    Integer getIntValue(Long tenant, String key);
+
+    String getValue(Long tenant, String key);
 }
