@@ -3,6 +3,7 @@ package com.inmaytide.orbit.library.service;
 import com.inmaytide.orbit.commons.domain.SystemProperty;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author inmaytide
@@ -14,7 +15,7 @@ public interface SystemPropertyService {
 
     void initializeForTenant(Long tenantId);
 
-    Integer getIntValue(Long tenant, String key);
+    Optional<Integer> getIntValue(Long tenant, String key);
 
-    String getValue(Long tenant, String key);
+    Optional<String> getValue(Long tenant, String key);
 }

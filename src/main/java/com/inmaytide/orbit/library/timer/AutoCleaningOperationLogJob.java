@@ -55,21 +55,22 @@ public class AutoCleaningOperationLogJob extends AbstractJob {
     protected void exec(JobExecutionContext context) {
         List<Tenant> tenants = tenantService.all();
         for (Tenant e : tenants) {
-            Integer retentionTime = propertyService.getIntValue(e.getId(), Constants.SPK_OP_LOG_RETENTION_TIME_IN_DAYS);
-            if (retentionTime == null || retentionTime == -1) {
-                continue;
-            }
-            LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(OperationLog::getTenantId, e.getId());
-            wrapper.apply("operation_time < TIMESTAMPADD(DAY, {0}, now())", retentionTime);
-            int affected = operationLogMapper.delete(wrapper);
-            if (affected > 0) {
-                OperationLogCleaning entity = new OperationLogCleaning();
-                entity.setAffected(BigDecimal.valueOf(affected));
-                entity.setTime(Instant.now());
-                entity.setTenantId(e.getId());
-                cleaningMapper.insert(entity);
-            }
+            propertyService
+                    .getIntValue(e.getId(), Constants.SPK_OP_LOG_RETENTION_TIME_IN_DAYS)
+                    .filter(value -> value != -1)
+                    .ifPresent(value -> {
+                        LambdaQueryWrapper<OperationLog> wrapper = new LambdaQueryWrapper<>();
+                        wrapper.eq(OperationLog::getTenantId, e.getId());
+                        wrapper.apply("operation_time < TIMESTAMPADD(DAY, {0}, now())", value);
+                        int affected = operationLogMapper.delete(wrapper);
+                        if (affected > 0) {
+                            OperationLogCleaning entity = new OperationLogCleaning();
+                            entity.setAffected(BigDecimal.valueOf(affected));
+                            entity.setTime(Instant.now());
+                            entity.setTenantId(e.getId());
+                            cleaningMapper.insert(entity);
+                        }
+                    });
         }
 
     }
