@@ -23,6 +23,17 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="system_properties" columnNames="tenant_id, key"/>
+        <sql>
+            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
+                                                       `exposed`, `global`)
+            VALUES (3721, 'times.days.user.password.valid', '用户密码有效时间(天)', '180', 'Y', 'N', 'Y');
+            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
+                                                       `exposed`, `global`)
+            VALUES (3721, 'times.days.operation.log.retention', '操作日志保留时间(天)', '180', 'Y', 'N', 'Y');
+        </sql>
+    </changeSet>
+
+    <changeSet id="000000000000002" author="inmaytide">
         <createTable tableName="operation_log_cleaning" remarks="用户日志自动清理记录">
             <column name="id" type="bigint" remarks="唯一标识">
                 <constraints primaryKey="true"/>
@@ -51,12 +62,57 @@
             <column name="path" type="varchar(512)" remarks="请求地址"/>
             <column name="http_method" type="varchar(8)" remarks="HttpMethod"/>
         </createTable>
-
-        <sql>
-            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`, `exposed`, `global`) VALUES (3721, 'times.days.user.password.valid', '用户密码有效时间(天)', '180', 'Y', 'N', 'Y');
-            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`, `exposed`, `global`) VALUES (3721, 'times.days.operation.log.retention', '操作日志保留时间(天)', '180', 'Y', 'N', 'Y');
-        </sql>
     </changeSet>
 
-
+    <changeSet id="000000000000003" author="inmaytide">
+        <createTable tableName="dictionary_category">
+            <column name="id" type="bigint" remarks="唯一标识">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="varchar(256)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(256)" remarks="类别名称"/>
+            <column name="max_level" type="int" remarks="数据字典最大层级" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="allow_modify" type="VARCHAR(2)" remarks="数据字典是否可修改" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible" type="VARCHAR(2)" remarks="是否可见" defaultValue="Y">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sequence" type="int"/>
+        </createTable>
+        <createTable tableName="dictionary">
+            <column name="id" type="bigint" remarks="唯一标识">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="category" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(256)" remarks="名称"/>
+            <column name="code" type="varchar(256)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="source" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent" type="varchar(256)" defaultValue="root">
+                <constraints nullable="false"/>
+            </column>
+            <column name="option_value" type="varchar(128)" remarks="下拉选择选项value, 为空默认使用code"/>
+            <column name="sharing" type="varchar(16)"/>
+            <column name="tenant" type="bigint"/>
+            <column name="organization" type="bigint"/>
+            <column name="region" type="bigint"/>
+            <column name="sequence" type="int"/>
+            <column name="created_time" type="timestamp" remarks="创建时间"/>
+            <column name="created_by" type="bigint" remarks="创建人"/>
+            <column name="modified_time" type="timestamp" remarks="最后修改时间"/>
+            <column name="modified_by" type="bigint" remarks="最后修改人"/>
+            <column name="deleted" type="varchar(2)" remarks="逻辑删除标识"/>
+            <column name="version" type="int" remarks="版本"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
