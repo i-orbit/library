@@ -11,13 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(title = "数据字典类型", accessMode = Schema.AccessMode.READ_ONLY, description = "不提供修改编辑接口")
 public class DictionaryCategory extends Entity {
 
-    @Schema(title = "类型编码", description = "全局唯一")
+    @Schema(title = "类型编码", description = "系统全局唯一")
     private String code;
 
     @Schema(title = "类型名称")
     private String name;
 
-    @Schema(title = "数据字典树形结构最大层级")
+    @Schema(title = "数据字典项作为树形结构时最大层级", description = "等于 -1 时表示无限制", defaultValue = "0")
     private Integer maxLevel;
 
     @Schema(title = "字典内容允许用户编辑修改")
