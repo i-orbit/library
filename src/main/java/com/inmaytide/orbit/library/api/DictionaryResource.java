@@ -6,6 +6,7 @@ import com.inmaytide.orbit.library.domain.Dictionary;
 import com.inmaytide.orbit.library.domain.DictionaryCategory;
 import com.inmaytide.orbit.library.service.DictionaryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,8 +40,8 @@ public class DictionaryResource {
     @GetMapping
     @OperationLogging
     @Operation(summary = "查询指定类型的数据字典信息树")
-    public List<TreeNode<Dictionary>> findDictionaries(@RequestParam(required = true) String category) {
-        return service.findDictionaries(category);
+    public List<TreeNode<Dictionary>> getTreeOfDictionaries(@Parameter(name = "指定类型编码") @RequestParam String category) {
+        return service.getTreeOfDictionaries(category);
     }
 
 }

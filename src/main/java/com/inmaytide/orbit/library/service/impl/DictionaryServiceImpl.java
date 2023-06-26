@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.inmaytide.orbit.commons.consts.Is;
+import com.inmaytide.orbit.commons.consts.Marks;
+import com.inmaytide.orbit.commons.domain.GlobalUser;
 import com.inmaytide.orbit.commons.domain.dto.result.TreeNode;
+import com.inmaytide.orbit.commons.security.SecurityUtils;
 import com.inmaytide.orbit.commons.utils.CommonUtils;
 import com.inmaytide.orbit.library.domain.Dictionary;
 import com.inmaytide.orbit.library.domain.DictionaryCategory;
@@ -13,9 +16,7 @@ import com.inmaytide.orbit.library.mapper.DictionaryMapper;
 import com.inmaytide.orbit.library.service.DictionaryService;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,8 +56,31 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public List<TreeNode<Dictionary>> findDictionaries(String category) {
-        return null;
+    public List<TreeNode<Dictionary>> getTreeOfDictionaries(String category) {
+        GlobalUser operator = SecurityUtils.getAuthorizedUser();
+        LambdaQueryWrapper<Dictionary> wrapper = Wrappers.lambdaQuery(Dictionary.class)
+                .eq(Dictionary::getCategory, category)
+                .orderByAsc(Dictionary::getSequence);
+        Map<String, List<Dictionary>> dictionaries = mapper.selectList(wrapper)
+                .stream()
+                .filter(d -> hasAuthority(d, operator))
+                .collect(Collectors.groupingBy(Dictionary::getParent, Collectors.toList()));
+        return dictionaries.getOrDefault(Marks.TREE_ROOT.getValue(), Collections.emptyList())
+                .stream()
+                .map(e -> transfer(e, dictionaries, 1))
+                .collect(Collectors.toList());
+    }
+
+    private TreeNode<Dictionary> transfer(Dictionary entity, Map<String, List<Dictionary>> all, int level) {
+        TreeNode<Dictionary> node = new TreeNode<>(entity);
+        node.setId(entity.getId());
+        node.setName(entity.getName());
+        node.setChildren(all.getOrDefault(entity.getCode(), Collections.emptyList()).stream().map(e -> transfer(e, all, level + 1)).collect(Collectors.toList()));
+        node.setAuthorized(true);
+        node.setParent(entity.getCode());
+        node.setSymbol(TREE_SYMBOL);
+        node.setLevel(level);
+        return node;
     }
 
     @Override
