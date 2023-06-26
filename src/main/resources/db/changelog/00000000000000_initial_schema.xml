@@ -115,4 +115,13 @@
             <column name="version" type="int" remarks="版本"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="000000000000004" author="inmaytide">
+        <createTable tableName="geographic_location" remarks="地理位置坐标点">
+            <column name="attribution" type="bigint" remarks="归属对象唯一标识"/>
+            <column name="longitude" type="decimal(16, 6)" remarks="经度" />
+            <column name="latitude" type="decimal(16, 6)" remarks="纬度" />
+        </createTable>
+        <addPrimaryKey tableName="geographic_location" columnNames="attribution, longitude, latitude"/>
+    </changeSet>
 </databaseChangeLog>
