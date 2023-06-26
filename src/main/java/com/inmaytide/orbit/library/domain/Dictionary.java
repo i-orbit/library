@@ -40,7 +40,7 @@ public class Dictionary extends TombstoneEntity {
     private Long organization;
 
     @Schema(title = "所属区域")
-    private Long region;
+    private Long area;
 
     @Schema(title = "排序字段")
     private Integer sequence;
@@ -117,12 +117,12 @@ public class Dictionary extends TombstoneEntity {
         this.organization = organization;
     }
 
-    public Long getRegion() {
-        return region;
+    public Long getArea() {
+        return area;
     }
 
-    public void setRegion(Long region) {
-        this.region = region;
+    public void setArea(Long area) {
+        this.area = area;
     }
 
     public Integer getSequence() {

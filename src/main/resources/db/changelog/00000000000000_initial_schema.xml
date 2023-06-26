@@ -105,7 +105,7 @@
             <column name="sharing" type="varchar(16)"/>
             <column name="tenant" type="bigint"/>
             <column name="organization" type="bigint"/>
-            <column name="region" type="bigint"/>
+            <column name="area" type="bigint"/>
             <column name="sequence" type="int"/>
             <column name="created_time" type="timestamp" remarks="创建时间"/>
             <column name="created_by" type="bigint" remarks="创建人"/>

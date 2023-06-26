@@ -35,8 +35,8 @@ public interface DictionaryService extends BasicService<Dictionary> {
         if (dictionary.getSharing() == Sharing.TENANT) {
             return Objects.equals(operator.getTenantId(), dictionary.getTenant());
         }
-        if (dictionary.getSharing() == Sharing.REGION) {
-            return operator.getAreas().contains(dictionary.getRegion());
+        if (dictionary.getSharing() == Sharing.AREA) {
+            return operator.getAreas().contains(dictionary.getArea());
         }
         return dictionary.getSharing() == Sharing.GENERIC;
     }
