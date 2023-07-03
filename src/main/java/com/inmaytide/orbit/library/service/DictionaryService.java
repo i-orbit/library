@@ -30,13 +30,13 @@ public interface DictionaryService extends BasicService<Dictionary> {
             return Objects.equals(operator.getId(), dictionary.getCreatedBy());
         }
         if (dictionary.getSharing() == Sharing.ORGANIZATION) {
-            return operator.getOrganizations().contains(dictionary.getOrganization());
+            return operator.getPerspective().getOrganizations().contains(dictionary.getOrganization());
         }
         if (dictionary.getSharing() == Sharing.TENANT) {
             return Objects.equals(operator.getTenantId(), dictionary.getTenant());
         }
         if (dictionary.getSharing() == Sharing.AREA) {
-            return operator.getAreas().contains(dictionary.getArea());
+            return operator.getPerspective().getAreas().contains(dictionary.getArea());
         }
         return dictionary.getSharing() == Sharing.GENERIC;
     }
