@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="000000000000001" author="inmaytide">
-        <createTable tableName="system_properties">
+        <createTable tableName="system_property">
             <column name="tenant_id" type="bigint" remarks="所属租户">
                 <constraints nullable="false"/>
             </column>
@@ -22,12 +22,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="system_properties" columnNames="tenant_id, key"/>
+        <addPrimaryKey tableName="system_property" columnNames="tenant_id, key"/>
         <sql>
-            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
+            INSERT INTO `library`.`system_property` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
                                                        `exposed`, `global`)
             VALUES (3721, 'times.days.user.password.valid', '用户密码有效时间(天)', '180', 'Y', 'N', 'Y');
-            INSERT INTO `library`.`system_properties` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
+            INSERT INTO `library`.`system_property` (`tenant_id`, `key`, `description`, `value`, `authenticated`,
                                                        `exposed`, `global`)
             VALUES (3721, 'times.days.operation.log.retention', '操作日志保留时间(天)', '180', 'Y', 'N', 'Y');
         </sql>
