@@ -1,8 +1,8 @@
 package com.inmaytide.orbit.library.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.inmaytide.orbit.commons.consts.Is;
 import com.inmaytide.orbit.commons.consts.Marks;
 import com.inmaytide.orbit.commons.domain.GlobalUser;
@@ -16,7 +16,9 @@ import com.inmaytide.orbit.library.mapper.DictionaryMapper;
 import com.inmaytide.orbit.library.service.DictionaryService;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,14 +26,11 @@ import java.util.stream.Collectors;
  * @since 2023/6/13
  */
 @Service
-public class DictionaryServiceImpl implements DictionaryService {
-
-    private final DictionaryMapper mapper;
+public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Dictionary> implements DictionaryService {
 
     private final DictionaryCategoryMapper categoryMapper;
 
-    public DictionaryServiceImpl(DictionaryMapper mapper, DictionaryCategoryMapper categoryMapper) {
-        this.mapper = mapper;
+    public DictionaryServiceImpl(DictionaryCategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
 
@@ -52,7 +51,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         LambdaQueryWrapper<Dictionary> wrapper = Wrappers.lambdaQuery(Dictionary.class)
                 .select(Dictionary::getCode, Dictionary::getName)
                 .in(Dictionary::getCode, codes);
-        return getMapper().selectList(wrapper).stream().collect(Collectors.toMap(Dictionary::getCode, Dictionary::getName));
+        return getBaseMapper().selectList(wrapper).stream().collect(Collectors.toMap(Dictionary::getCode, Dictionary::getName));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         LambdaQueryWrapper<Dictionary> wrapper = Wrappers.lambdaQuery(Dictionary.class)
                 .eq(Dictionary::getCategory, category)
                 .orderByAsc(Dictionary::getSequence);
-        Map<String, List<Dictionary>> dictionaries = mapper.selectList(wrapper)
+        Map<String, List<Dictionary>> dictionaries = baseMapper.selectList(wrapper)
                 .stream()
                 .filter(d -> hasAuthority(d, operator))
                 .collect(Collectors.groupingBy(Dictionary::getParent, Collectors.toList()));
@@ -83,13 +82,4 @@ public class DictionaryServiceImpl implements DictionaryService {
         return node;
     }
 
-    @Override
-    public BaseMapper<Dictionary> getMapper() {
-        return mapper;
-    }
-
-    @Override
-    public Class<Dictionary> getEntityClass() {
-        return Dictionary.class;
-    }
 }
